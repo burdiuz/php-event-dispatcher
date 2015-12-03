@@ -1,0 +1,34 @@
+{
+  "name": "aw/events",
+  "description": "PHP Events",
+  "version": "0.0.1",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/burdiuz/php-object"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/burdiuz/php-callbacks"
+    }
+  ],
+  "require":{
+    "aw/object":">=0.0.3",
+    "aw/callbacks":">=0.0.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.0.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "aw\\": "source/aw/"
+    },
+    "psr-0": {
+      "aw\\": "source/aw/",
+      "aw\\events\\": "source/aw/events/",
+	  "aw\\callbacks\\": "source/aw/callbacks/"
+    }
+  }
+}

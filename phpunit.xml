@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpunit bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="aw\events\EventDispatcher">
+            <file>tests/aw/events/EventDispatcherTest.php</file>
+        </testsuite>
+        <testsuite name="aw\events\Event">
+            <file>tests/aw/events/EventTest.php</file>
+        </testsuite>
+        <testsuite name="aw\events\ValueEvent">
+            <file>tests/aw/events/ValueEventTest.php</file>
+        </testsuite>
+        <testsuite name="aw\callbacks\EventCallback">
+            <file>tests/aw/callbacks/EventCallbackTest.php</file>
+        </testsuite>
+        <testsuite name="aw\callbacks\ValueEventCallback">
+            <file>tests/aw/callbacks/ValueEventCallbackTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>
