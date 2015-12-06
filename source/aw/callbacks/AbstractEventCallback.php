@@ -2,33 +2,27 @@
 
 namespace aw\callbacks {
 
-  use aw\events\Event;
   use aw\events\IEvent;
   use aw\events\IEventDispatcher;
 
   abstract class AbstractEventCallback extends Callback {
-  static
     const EVENT_TYPE = 'callbackNotification';
     /**
      *
      * @var IEventDispatcher
      */
-    protected $_dispatcher;
-    protected $_baseEvent;
+    private $_dispatcher;
+    protected $_eventType;
 
-    public function __construct(IEventDispatcher $dispatcher, $event = null) {
+    public function __construct(IEventDispatcher $dispatcher, string $eventType = null) {
       parent::__construct($dispatcher);
-      $this->setBaseEvent($event ? $event : self::EVENT_TYPE);
+      $this->_eventType = is_null($eventType) ? self::EVENT_TYPE : $eventType;
     }
 
-    protected function setBaseEvent($event) {
-      if (is_string($event)) {
-        $this->_baseEvent = new Event($event);
-      } else if ($event instanceof IEvent) {
-        $this->_baseEvent = $event;
-      } else {
-        throw new \InvalidArgumentException('Base event should be of string or \\aw\\events\\IEvent type.');
-      }
+    abstract protected function generateEvent($args):IEvent;
+
+    public function call(array $args = array()) {
+      $this->_dispatcher->dispatchEvent($this->generateEvent($args));
     }
   }
 }

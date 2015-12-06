@@ -1,27 +1,17 @@
 <?php
 
-/**
- * Диспатчит ValueEvent, когда приходит новое значение/ия
+namespace aw\callbacks {
 
-$callback = new EventCallback();
-$callback->addEventListener(ValueEvent::VALUE_COMMIT, new FunctionHandler('handler'));
-function handler(ValueEvent $event){
-	echo $event->value();
+  use aw\events\Event;
+  use aw\events\IEvent;
+
+  class EventCallback extends AbstractEventCallback {
+    private $_event;
+    protected function generateEvent($args):IEvent {
+      if(!$this->_event){
+        $this->_event = new Event($this->_eventType);
+      }
+      return $this->_event;
+    }
+  }
 }
-call_user_func($callback->caller(), 'value');
-
- * @author Oleg
- *
- */
-class EventCallback extends AbstractEventCallback implements IEventDispatcher{
-	protected $_value;
-	public function getData(){
-		return $this->_value;
-	}
-	public function __callback($value){
-		$this->_value = $value;
-		$this->_dispatcher->dispatchEvent(new ValueEvent(ValueEvent::VALUE_COMMIT, false, $value));
-	}
-}
-
-?>
