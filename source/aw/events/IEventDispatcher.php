@@ -16,12 +16,12 @@ namespace aw\events {
 
     public function removeEventListener(string $eventType, callable $handler);
 
-    public function hasEventListener(string $eventType):boolean;
+    public function hasEventListener(string $eventType):bool;
 
     /**
      * @param string|IEvent $event
      * @return boolean
      */
-    public function dispatchEvent($event):boolean;
+    public function dispatchEvent($event):bool;
   }
 }

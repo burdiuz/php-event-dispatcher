@@ -14,7 +14,7 @@ namespace aw\callbacks {
 
     public function setUp() {
       $this->target = $this->getMock('\\aw\\events\\EventDispatcher');
-      $this->callback = new EventCallback();
+      $this->callback = new EventCallback($this->target);
     }
 
     public function testCall() {

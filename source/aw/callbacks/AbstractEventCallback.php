@@ -7,11 +7,6 @@ namespace aw\callbacks {
 
   abstract class AbstractEventCallback extends Callback {
     const EVENT_TYPE = 'callbackNotification';
-    /**
-     *
-     * @var IEventDispatcher
-     */
-    private $_dispatcher;
     protected $_eventType;
 
     public function __construct(IEventDispatcher $dispatcher, string $eventType = null) {
@@ -22,7 +17,7 @@ namespace aw\callbacks {
     abstract protected function generateEvent($args):IEvent;
 
     public function call(array $args = array()) {
-      $this->_dispatcher->dispatchEvent($this->generateEvent($args));
+      return $this->_target->dispatchEvent($this->generateEvent($args));
     }
   }
 }
