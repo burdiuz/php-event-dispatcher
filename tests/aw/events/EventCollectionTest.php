@@ -31,15 +31,37 @@ namespace aw\events {
     }
 
     public function testCreateWithoutParent() {
-
+      $collection = new EventCollection('key', function () {
+      }, null);
+      $this->assertNull($collection->getParent());
     }
 
     public function testEmptyCallbackOnRemove() {
-
+      $callbackArgs = null;
+      $callback = function(...$args) use(&$callbackArgs) {
+        $callbackArgs = $args;
+      };
+      $collection = new EventCollection('key', $callback, $this->parent);
+      $collection->addItem(function(){});
+      $collection->addItem(function(){});
+      $this->assertNull($callbackArgs);
+      $collection->removeItemAt(0);
+      $this->assertNull($callbackArgs);
+      $collection->removeItemAt(1);
+      $this->assertEquals([$collection], $callbackArgs);
     }
 
     public function testEmptyCallbackOnRemoveAll() {
-
+      $callbackArgs = null;
+      $callback = function(...$args) use(&$callbackArgs) {
+        $callbackArgs = $args;
+      };
+      $collection = new EventCollection('key', $callback, $this->parent);
+      $collection->addItem(function(){});
+      $collection->addItem(function(){});
+      $this->assertNull($callbackArgs);
+      $collection->removeAll();
+      $this->assertEquals([$collection], $callbackArgs);
     }
   }
 }
