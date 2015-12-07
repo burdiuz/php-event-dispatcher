@@ -10,6 +10,9 @@ ehthumbs.db
 vendor/
 composer.lock
 
+# PHPUnit
+reports/
+
 # Folder config file
 Desktop.ini
 
