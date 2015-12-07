@@ -8,7 +8,6 @@ namespace aw\callbacks {
 
   use aw\events\Event;
   use aw\events\IEvent;
-  use aw\events\IEventDispatcher;
   use \PHPUnit_Framework_TestCase as TestCase;
   use Prophecy\Argument;
 
@@ -27,6 +26,9 @@ namespace aw\callbacks {
     public $target;
 
     public function setUp() {
+      /**
+       * @var \Prophecy\Prophecy\ObjectProphecy
+       */
       $this->targetSpy = $this->prophesize('\\aw\\events\\EventDispatcher');
       $this->target = $this->targetSpy->reveal();
     }
@@ -46,8 +48,10 @@ namespace aw\callbacks {
       /**
        * @var \Prophecy\Prophecy\MethodProphecy
        */
-      $this->targetSpy->dispatchEvent(Argument::any())->willReturn(true);
+      $spy = $this->targetSpy->dispatchEvent(Argument::type('\\aw\events\\IEvent'))->willReturn(true);
+      $spy->shouldBeCalledTimes(1);
       $this->assertInternalType('bool', $callback());
+      $spy->checkPrediction();
     }
   }
 

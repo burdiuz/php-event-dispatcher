@@ -13,5 +13,9 @@ namespace aw\callbacks {
       }
       return $this->_event;
     }
+    public function __destruct() {
+      parent::__destruct();
+      unset($this->_event);
+    }
   }
 }
