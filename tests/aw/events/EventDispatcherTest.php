@@ -10,5 +10,11 @@ namespace aw\events{
 
   class EventDispatcherTest extends TestCase {
 
+    public function setUp() {
+
+    }
+    public function test() {
+
+    }
   }
 }

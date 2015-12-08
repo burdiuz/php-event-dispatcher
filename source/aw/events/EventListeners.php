@@ -8,7 +8,7 @@ namespace aw\events {
 
   use aw\Object;
 
-  class EventListeners extends Object {
+  class EventListeners extends Object implements \IteratorAggregate {
 
     protected $_hash = array();
     protected $_emptyCallback;
@@ -33,6 +33,10 @@ namespace aw\events {
       return isset($this->_hash[$eventType]) && $this->_hash[$eventType]->getCount();
     }
 
+    public function get(string $eventType) {
+      return $this->_hash[$eventType];
+    }
+
     public function remove(string $eventType, callable $handler) {
       $types = $this->_hash[$eventType];
       if ($types) {
@@ -41,10 +45,6 @@ namespace aw\events {
           $priorities->removeItem($handler);
         }
       }
-    }
-
-    public function get(string $eventType) {
-      return $this->_hash[$eventType];
     }
 
     public function removeType(string $eventType) {
@@ -60,6 +60,16 @@ namespace aw\events {
 
     public function clear() {
       $this->_hash = array();
+    }
+
+    public function getIterator() {
+      foreach ($this->_hash as $eventType => $priorities) {
+        foreach ($priorities as $priority => $listeners) {
+          foreach ($listeners as $index => $listener) {
+            yield $eventType => $listener;
+          }
+        }
+      }
     }
 
     public function __destruct() {
