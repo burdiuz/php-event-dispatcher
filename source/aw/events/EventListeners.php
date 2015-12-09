@@ -88,6 +88,17 @@ namespace aw\events {
       }
     }
 
+    public function getEventIterator(string $eventType) {
+      if(isset($this->_hash[$eventType])){
+        $priorities = $this->_hash[$eventType];
+        foreach ($priorities as $priority => $listeners) {
+          foreach ($listeners as $index => $listener) {
+            yield $eventType => $listener;
+          }
+        }
+      }
+    }
+
     public function __destruct() {
       unset($this->_hash);
     }

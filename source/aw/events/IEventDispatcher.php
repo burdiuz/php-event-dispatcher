@@ -12,7 +12,7 @@ namespace aw\events {
      * @param int $priority
      * @return callable
      */
-    public function addEventListener(string $eventType, $handler, int $priority = 0):callable;
+    public function addEventListener(string $eventType, callable $handler, int $priority = 0):callable;
 
     public function removeEventListener(string $eventType, callable $handler);
 
