@@ -15,6 +15,9 @@ namespace aw\events {
       $this->parent = new EventCollection(null, function () {
       }, null);
     }
+    public function tearDown() {
+      unset($this->parent);
+    }
 
     public function testCreateWithNumericKey() {
       $collection = new EventCollection(321, function () {

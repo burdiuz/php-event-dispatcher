@@ -24,9 +24,14 @@ namespace aw\events {
       };
     }
 
-    public function add(string $eventType, int $priority, callable $callable) {
+    public function add(string $eventType, int $priority, callable $callable):bool {
+      $result = false;
       $collection = $this->getCollection($eventType, $priority);
-      $collection[] = $callable;
+      if(!$collection->hasItem($callable)){
+        $collection[] = $callable;
+        $result = true;
+      }
+      return $result;
     }
 
     public function has(string $eventType):bool {
@@ -34,28 +39,39 @@ namespace aw\events {
     }
 
     public function get(string $eventType) {
-      return $this->_hash[$eventType];
+      return isset($this->_hash[$eventType]) ? $this->_hash[$eventType] : null;
     }
 
-    public function remove(string $eventType, callable $handler) {
-      $types = $this->_hash[$eventType];
-      if ($types) {
-        foreach ($types as /** @var EventCollection */
+    public function remove(string $eventType, callable $handler):bool {
+      $result = false;
+      if (isset($this->_hash[$eventType])) {
+        $types = $this->_hash[$eventType];
+        foreach ($types as
+          /**
+           * @var EventCollection
+           */
                  $priorities) {
-          $priorities->removeItem($handler);
+          $result = $priorities->removeItem($handler) || $result;
         }
       }
+      return $result;
     }
 
-    public function removeType(string $eventType) {
-      unset($this->_hash[$eventType]);
-    }
-
-    public function removePriority(string $eventType, int $priority) {
-      $types = $this->_hash[$eventType];
-      if ($types) {
-        $types->removeItemAt($priority);
+    public function removeType(string $eventType):bool {
+      $result = isset($this->_hash[$eventType]);
+      if ($result) {
+        unset($this->_hash[$eventType]);
       }
+      return $result;
+    }
+
+    public function removePriority(string $eventType, int $priority):bool {
+      $result = false;
+      if (isset($this->_hash[$eventType])) {
+        $types = $this->_hash[$eventType];
+        $result = $types->removeItemAt($priority);
+      }
+      return $result;
     }
 
     public function clear() {

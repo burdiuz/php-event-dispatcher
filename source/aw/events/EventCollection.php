@@ -31,10 +31,10 @@ class EventCollection extends CallableCollection {
     return $this->_parent;
   }
 
-  public function removeItemAt($index) {
-    $callback = parent::removeItemAt($index);
+  public function removeItemAt($index):bool {
+    $result = parent::removeItemAt($index);
     $this->checkEmpty();
-    return $callback;
+    return $result;
   }
 
   public function removeAll() {
@@ -46,6 +46,12 @@ class EventCollection extends CallableCollection {
     if (!$this->getCount()) {
       $empty = $this->_emptyCallback;
       $empty($this);
+    }
+  }
+
+  public function __invoke(...$args) {
+    foreach($this->_items as $value){
+      $value(...$args);
     }
   }
 

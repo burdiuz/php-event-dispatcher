@@ -19,7 +19,7 @@
         <testsuite name="aw\events\EventCollection">
             <file>tests/aw/events/EventCollectionTest.php</file>
         </testsuite>
-        <testsuite name="aw\events\EventDispatcher">
+        <testsuite name="aw\events\EventListeners">
             <file>tests/aw/events/EventListenersTest.php</file>
         </testsuite>
         <testsuite name="aw\events\EventDispatcher">

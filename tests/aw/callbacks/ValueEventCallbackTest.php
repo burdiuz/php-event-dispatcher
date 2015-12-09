@@ -26,6 +26,16 @@ namespace aw\callbacks {
       $this->callback = new ValueEventCallback($this->target->reveal());
     }
 
+    public function tearDown() {
+      /**
+       * @var \Prophecy\Prophecy\ObjectProphecy
+       */
+      unset($this->target);
+      unset($this->eventType);
+      unset($this->target);
+      unset($this->callback);
+    }
+
     public function testCall() {
       $callback = $this->callback;
       $spy = $this->target->dispatchEvent($this->eventType)->shouldBeCalledTimes(1);

@@ -33,6 +33,11 @@ namespace aw\callbacks {
       $this->target = $this->targetSpy->reveal();
     }
 
+    public function tearDown() {
+      unset($this->targetSpy);
+      unset($this->target);
+    }
+
     public function testCreateWithEventType() {
       $callback = new AbstractEventCallbackTest_AbstractEventCallback($this->target, 'commit');
       $this->assertEquals('commit', $callback->getEventType());

@@ -26,6 +26,13 @@ namespace aw\callbacks {
       $this->callback = new EventCallback($this->target->reveal());
     }
 
+    public function tearDown() {
+      unset($this->target);
+      unset($this->eventType);
+      unset($this->target);
+      unset($this->callback);
+    }
+
     public function testCall() {
       $callback = $this->callback;
       $spy = $this->target->dispatchEvent($this->eventType)->shouldBeCalledTimes(1);
