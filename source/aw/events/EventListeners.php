@@ -45,13 +45,9 @@ namespace aw\events {
     public function remove(string $eventType, callable $handler):bool {
       $result = false;
       if (isset($this->_hash[$eventType])) {
-        $types = $this->_hash[$eventType];
-        foreach ($types as
-          /**
-           * @var EventCollection
-           */
-                 $priorities) {
-          $result = $priorities->removeItem($handler) || $result;
+        $priorities = $this->_hash[$eventType];
+        foreach ($priorities as $priority) {
+          $result = $priority->removeItem($handler) || $result;
         }
       }
       return $result;
@@ -105,17 +101,17 @@ namespace aw\events {
 
     private function getCollection(string $eventType, int $priority) {
       if (!isset($this->_hash[$eventType])) {
-        $types = new EventCollection($eventType, $this->_emptyCallback);
-        $this->_hash[$eventType] = $types;
+        $priorities = new EventCollection($eventType, $this->_emptyCallback);
+        $this->_hash[$eventType] = $priorities;
       } else {
-        $types = $this->_hash[$eventType];
+        $priorities = $this->_hash[$eventType];
       }
-      $priorities = $types->getItemAt($priority);
-      if (!$priorities) {
-        $priorities = new EventCollection($eventType, $this->_emptyCallback, $types);
-        $types->setItem($priority, $priorities);
+      $priorityCollection = $priorities->getItemAt($priority);
+      if (is_null($priorityCollection)) {
+        $priorityCollection = new EventCollection($priority, $this->_emptyCallback, $priorities);
+        $priorities->setItem($priority, $priorityCollection);
       }
-      return $priorities;
+      return $priorityCollection;
     }
   }
 }

@@ -4,7 +4,7 @@
  */
 
 namespace {
-  function _EventDispatcherTest_eventHandler($arg){
+  function _EventDispatcherTest_eventHandler($arg) {
     return $arg;
   }
 }
@@ -12,6 +12,17 @@ namespace {
 namespace aw\events {
 
   use \PHPUnit_Framework_TestCase as TestCase;
+
+  class _EventDispatcherTest_EventDispatcherTargetMock {
+    public function firstHandler($event) {
+    }
+
+    public function secondHandler($event) {
+    }
+
+    public function thirdHandler($event) {
+    }
+  }
 
   class EventDispatcherTest extends TestCase {
     /**
@@ -22,6 +33,7 @@ namespace aw\events {
      * @var EventDispatcher
      */
     public $target;
+    public $handlerSpies;
     public $handlers;
     public $handler1;
     public $handler2;
@@ -31,7 +43,11 @@ namespace aw\events {
       $this->parent = $this->prophesize();
       $this->parent->willImplement('\\aw\\events\\IEventDispatcher');
       $this->target = new EventDispatcher($this->parent->reveal());
-      $this->handlers = $this->getMockBuilder('stdClass')->setMethods(array('first', 'second', 'third'))->getMock();
+      $this->handlerSpies = $this->prophesize('\\aw\\events\\_EventDispatcherTest_EventDispatcherTargetMock');
+      $this->handlerSpies->firstHandler()->willReturn(1);
+      $this->handlerSpies->secondHandler()->willReturn(2);
+      $this->handlerSpies->thirdHandler()->willReturn(3);
+      $this->handlers = $this->handlerSpies->reveal();
       $this->handler1 = function () {
         return 1;
       };
@@ -71,6 +87,9 @@ namespace aw\events {
       $this->assertInstanceOf('\\aw\\callbacks\\FunctionCallback', $listener);
     }
 
+    /**
+     * @ depends testAddListener
+     */
     public function testAddDuplicateListener() {
       $this->testAddListener();
       $this->target->addEventListener('event1', $this->handler1);
@@ -80,7 +99,8 @@ namespace aw\events {
      * @expectedException \InvalidArgumentException
      */
     public function testAddListenerErrorPriority() {
-      $listener = $this->target->addEventListener('event1', function(){}, PHP_INT_MAX);
+      $listener = $this->target->addEventListener('event1', function () {
+      }, PHP_INT_MAX);
     }
 
     /**
@@ -93,8 +113,17 @@ namespace aw\events {
       $this->assertFalse($this->target->hasEventListener('event3'));
     }
 
+    /**
+     * @ depends testAddListener
+     */
     public function testRemoveListener() {
-
+      $this->testAddListener();
+      $this->target->removeEventListener('event1', $this->handler1);
+      $this->assertFalse($this->target->hasEventListener('event1'));
+      $this->target->removeEventListener('event2', $this->handler2);
+      $this->assertTrue($this->target->hasEventListener('event2'));
+      $this->target->removeEventListener('event2', $this->handler3);
+      $this->assertFalse($this->target->hasEventListener('event2'));
     }
 
     public function testRemoveNotExistentListener() {

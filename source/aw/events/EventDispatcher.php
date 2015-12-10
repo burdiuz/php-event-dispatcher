@@ -3,7 +3,6 @@
  * Created by Oleg Galaburda on 04.12.15.
  */
 
-
 namespace aw\events {
 
   use aw\callbacks\FunctionCallback;
