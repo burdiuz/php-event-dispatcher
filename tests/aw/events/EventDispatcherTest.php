@@ -12,6 +12,8 @@ namespace {
 namespace aw\events {
 
   use \PHPUnit_Framework_TestCase as TestCase;
+  use Prophecy\Argument;
+  use Prophecy\Prophecy\MethodProphecy;
 
   class _EventDispatcherTest_EventDispatcherTargetMock {
     public function firstHandler($event) {
@@ -44,9 +46,9 @@ namespace aw\events {
       $this->parent->willImplement('\\aw\\events\\IEventDispatcher');
       $this->target = new EventDispatcher($this->parent->reveal());
       $this->handlerSpies = $this->prophesize('\\aw\\events\\_EventDispatcherTest_EventDispatcherTargetMock');
-      $this->handlerSpies->firstHandler()->willReturn(1);
-      $this->handlerSpies->secondHandler()->willReturn(2);
-      $this->handlerSpies->thirdHandler()->willReturn(3);
+      $this->handlerSpies->firstHandler(Argument::type('\\aw\\events\\IEvent'))->willReturnArgument(0);
+      $this->handlerSpies->secondHandler(Argument::type('\\aw\\events\\IEvent'))->willReturnArgument(0);
+      $this->handlerSpies->thirdHandler(Argument::type('\\aw\\events\\IEvent'))->willReturnArgument(0);
       $this->handlers = $this->handlerSpies->reveal();
       $this->handler1 = function () {
         return 1;
@@ -88,7 +90,7 @@ namespace aw\events {
     }
 
     /**
-     * @ depends testAddListener
+     * @depends testAddListener
      */
     public function testAddDuplicateListener() {
       $this->testAddListener();
@@ -104,7 +106,7 @@ namespace aw\events {
     }
 
     /**
-     * @ depends testAddListener
+     * @depends testAddListener
      */
     public function testHasListener() {
       $this->testAddListener();
@@ -114,7 +116,7 @@ namespace aw\events {
     }
 
     /**
-     * @ depends testAddListener
+     * @depends testAddListener
      */
     public function testRemoveListener() {
       $this->testAddListener();
@@ -126,16 +128,88 @@ namespace aw\events {
       $this->assertFalse($this->target->hasEventListener('event2'));
     }
 
+    /**
+     * @depends testAddListener
+     */
     public function testRemoveNotExistentListener() {
-
+      $this->testAddListener();
+      $this->target->removeEventListener('event3', $this->handler1);
+      $this->target->removeEventListener('event3', $this->handler2);
+      $this->target->removeEventListener('event1', $this->handler2);
+      $this->target->removeEventListener('event2', $this->handler1);
+      $this->assertTrue($this->target->hasEventListener('event1'));
+      $this->assertTrue($this->target->hasEventListener('event2'));
     }
 
+    /**
+     * @depends testAddListener
+     */
     public function testRemoveListeners() {
+      $this->testAddListener();
+      EventDispatcher::removeListeners($this->target, 'event1');
+      $this->assertFalse($this->target->hasEventListener('event1'));
+      $this->assertTrue($this->target->hasEventListener('event2'));
+      EventDispatcher::removeListeners($this->target, 'event2');
+      $this->assertFalse($this->target->hasEventListener('event1'));
+      $this->assertFalse($this->target->hasEventListener('event2'));
+    }
+
+    /**
+     * @depends testAddListener
+     */
+    public function testRemoveAllListeners() {
+      $this->testAddListener();
+      EventDispatcher::removeAllListeners($this->target);
+      $this->assertFalse($this->target->hasEventListener('event1'));
+      $this->assertFalse($this->target->hasEventListener('event2'));
 
     }
 
-    public function testRemoveAllListeners() {
+    private function addSpyListeners(){
+      $this->target->addEventListener('event1', [$this->handlers, 'firstHandler']);
+      $this->target->addEventListener('event2', [$this->handlers, 'secondHandler']);
+      $this->target->addEventListener('event2', [$this->handlers, 'thirdHandler'], -100);
+    }
 
+    public function testDispatchEventObject() {
+      $this->addSpyListeners();
+      $event = new Event('event1');
+      $this->handlerSpies->firstHandler(Argument::type('\\aw\\events\\IEvent'))->shouldBeCalledTimes(1);
+      $this->handlerSpies->secondHandler(Argument::type('\\aw\\events\\IEvent'))->shouldNotBeCalled();
+      $this->handlerSpies->thirdHandler(Argument::type('\\aw\\events\\IEvent'))->shouldNotBeCalled();
+      $this->assertTrue($this->target->dispatchEvent($event));
+      $this->handlerSpies->checkProphecyMethodsPredictions();
+    }
+    
+    public function testDispatchUnknownEvent() {
+      $this->addSpyListeners();
+      $event = new Event('event-unknown');
+      $this->handlerSpies->firstHandler(Argument::type('\\aw\\events\\IEvent'))->shouldNotBeCalled();
+      $this->handlerSpies->secondHandler(Argument::type('\\aw\\events\\IEvent'))->shouldNotBeCalled();
+      $this->handlerSpies->thirdHandler(Argument::type('\\aw\\events\\IEvent'))->shouldNotBeCalled();
+      $this->assertFalse($this->target->dispatchEvent($event));
+      $this->handlerSpies->checkProphecyMethodsPredictions();
+    }
+
+    public function testDispatchEventTypeString() {
+      $this->addSpyListeners();
+      $this->handlerSpies->firstHandler(Argument::type('\\aw\\events\\IEvent'))->shouldBeCalledTimes(1);
+      $this->assertTrue($this->target->dispatchEvent('event1'));
+      $this->handlerSpies->checkProphecyMethodsPredictions();
+    }
+
+    public function testDispatchedEventTargetWhenHasListeners() {
+      $this->addSpyListeners();
+      $event = new Event('event1');
+      $this->assertTrue($this->target->dispatchEvent($event));
+      $this->assertInstanceOf('\\aw\\events\\EventDispatcher', $event->getTarget());
+    }
+
+    public function testDispatchedEventTargetWhenDoesNotHaveListeners() {
+      $this->addSpyListeners();
+      $event = new Event('else');
+      $this->assertFalse($this->target->dispatchEvent($event));
+      $this->assertFalse($event->hasTarget());
     }
   }
 }

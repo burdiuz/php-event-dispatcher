@@ -22,6 +22,10 @@ class Event extends Object implements IEvent {
     return $this->_type;
   }
 
+  public function hasTarget():bool {
+    return !is_null($this->_target);
+  }
+
   public function getTarget():IEventDispatcher {
     return $this->_target;
   }

@@ -51,6 +51,9 @@ namespace aw\events {
         $event = new Event($eventType);
       }
       if ($this->hasEventListener($eventType)) {
+        if($event instanceof Event){
+          Event::reset($event, $this);
+        }
         foreach ($this->_listeners->getEventIterator($eventType) as $listener) {
           $listener($event);
           $result = true;

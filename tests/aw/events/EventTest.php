@@ -12,11 +12,22 @@ namespace aw\events {
     public function testAccessors() {
       $event = new Event('newType');
       $this->assertEquals('newType', $event->getType());
+      Event::reset($event, new EventDispatcher());
+      $this->assertNotNull($event->getTarget());
+    }
+
+    public function testHasTarget() {
+      $event = new Event('newType');
+      $this->assertFalse($event->hasTarget());
+      Event::reset($event, new EventDispatcher());
+      $this->assertTrue($event->hasTarget());
     }
 
     public function testProperties() {
       $event = new Event('newType');
       $this->assertEquals('newType', $event->type);
+      Event::reset($event, new EventDispatcher());
+      $this->assertNotNull($event->target);
     }
 
     public function testPreventDefault() {
