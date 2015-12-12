@@ -16,11 +16,11 @@
         <testsuite name="aw\callbacks\ValueEventCallback">
             <file>tests/aw/callbacks/ValueEventCallbackTest.php</file>
         </testsuite>
-        <testsuite name="aw\events\EventCollection">
-            <file>tests/aw/events/EventCollectionTest.php</file>
+        <testsuite name="aw\events\dispatcher\InternalListenersCollection">
+            <file>tests/aw/events/dispatcher/InternalListenersCollectionTest.php</file>
         </testsuite>
-        <testsuite name="aw\events\EventListeners">
-            <file>tests/aw/events/EventListenersTest.php</file>
+        <testsuite name="aw\events\dispatcher\InternalEventDispatcherCollection">
+            <file>tests/aw/events/dispatcher/InternalEventDispatcherCollectionTest.php</file>
         </testsuite>
         <testsuite name="aw\events\EventDispatcher">
             <file>tests/aw/events/EventDispatcherTest.php</file>

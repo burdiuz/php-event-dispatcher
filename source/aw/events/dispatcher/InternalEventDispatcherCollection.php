@@ -4,17 +4,17 @@
  */
 
 
-namespace aw\events {
+namespace aw\events\dispatcher {
 
   use aw\Object;
 
-  class EventListeners extends Object implements \IteratorAggregate {
+  class InternalEventDispatcherCollection extends Object implements \IteratorAggregate {
 
     protected $_hash = array();
     protected $_emptyCallback;
 
     public function __construct() {
-      $this->_emptyCallback = function (EventCollection $collection) {
+      $this->_emptyCallback = function (InternalListenersCollection $collection) {
         $key = $collection->getType();
         if (is_string($key)) {
           $this->removeType($key);
@@ -101,14 +101,14 @@ namespace aw\events {
 
     private function getCollection(string $eventType, int $priority) {
       if (!isset($this->_hash[$eventType])) {
-        $priorities = new EventCollection($eventType, $this->_emptyCallback);
+        $priorities = new InternalListenersCollection($eventType, $this->_emptyCallback);
         $this->_hash[$eventType] = $priorities;
       } else {
         $priorities = $this->_hash[$eventType];
       }
       $priorityCollection = $priorities->getItemAt($priority);
       if (is_null($priorityCollection)) {
-        $priorityCollection = new EventCollection($priority, $this->_emptyCallback, $priorities);
+        $priorityCollection = new InternalListenersCollection($priority, $this->_emptyCallback, $priorities);
         $priorities->setItem($priority, $priorityCollection);
       }
       return $priorityCollection;

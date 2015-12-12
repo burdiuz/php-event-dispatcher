@@ -5,18 +5,7 @@
 
 
 namespace aw\events {
-  interface IEventDispatcher {
-    /**
-     * @param string $eventType
-     * @param callable|array $handler
-     * @param int $priority
-     * @return callable
-     */
-    public function addEventListener(string $eventType, callable $handler, int $priority = 0):callable;
-
-    public function removeEventListener(string $eventType, callable $handler);
-
-    public function hasEventListener(string $eventType):bool;
+  interface IEventDispatcher extends IEventListeners {
 
     /**
      * @param string|IEvent $event

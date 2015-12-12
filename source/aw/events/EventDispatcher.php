@@ -7,6 +7,7 @@ namespace aw\events {
 
   use aw\callbacks\FunctionCallback;
   use aw\callbacks\MethodCallback;
+  use aw\events\dispatcher\InternalEventDispatcherCollection;
   use \InvalidArgumentException;
   use aw\Object;
 
@@ -17,7 +18,7 @@ namespace aw\events {
 
     public function __construct(IEventDispatcher $target = null) {
       $this->_target = $target ?: $this;
-      $this->_listeners = new EventListeners();
+      $this->_listeners = new InternalEventDispatcherCollection();
     }
 
 

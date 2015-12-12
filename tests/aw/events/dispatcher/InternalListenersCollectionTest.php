@@ -4,15 +4,15 @@
  */
 
 
-namespace aw\events {
+namespace aw\events\dispatcher {
 
   use \PHPUnit_Framework_TestCase as TestCase;
 
-  class EventCollectionTest extends TestCase {
+  class InternalListenersCollectionTest extends TestCase {
     public $parent;
 
     public function setUp() {
-      $this->parent = new EventCollection(null, function () {
+      $this->parent = new InternalListenersCollection(null, function () {
       }, null);
     }
     public function tearDown() {
@@ -20,21 +20,21 @@ namespace aw\events {
     }
 
     public function testCreateWithNumericKey() {
-      $collection = new EventCollection(321, function () {
+      $collection = new InternalListenersCollection(321, function () {
       }, $this->parent);
       $this->assertEquals(321, $collection->getType());
       $this->assertSame($this->parent, $collection->getParent());
     }
 
     public function testCreateWithStringKey() {
-      $collection = new EventCollection('key!11', function () {
+      $collection = new InternalListenersCollection('key!11', function () {
       }, $this->parent);
       $this->assertEquals('key!11', $collection->getType());
       $this->assertSame($this->parent, $collection->getParent());
     }
 
     public function testCreateWithoutParent() {
-      $collection = new EventCollection('key', function () {
+      $collection = new InternalListenersCollection('key', function () {
       }, null);
       $this->assertNull($collection->getParent());
     }
@@ -44,7 +44,7 @@ namespace aw\events {
       $callback = function(...$args) use(&$callbackArgs) {
         $callbackArgs = $args;
       };
-      $collection = new EventCollection('key', $callback, $this->parent);
+      $collection = new InternalListenersCollection('key', $callback, $this->parent);
       $collection->addItem(function(){});
       $collection->addItem(function(){});
       $this->assertNull($callbackArgs);
@@ -59,7 +59,7 @@ namespace aw\events {
       $callback = function(...$args) use(&$callbackArgs) {
         $callbackArgs = $args;
       };
-      $collection = new EventCollection('key', $callback, $this->parent);
+      $collection = new InternalListenersCollection('key', $callback, $this->parent);
       $collection->addItem(function(){});
       $collection->addItem(function(){});
       $this->assertNull($callbackArgs);

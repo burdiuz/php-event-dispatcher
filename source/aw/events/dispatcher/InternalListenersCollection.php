@@ -3,19 +3,19 @@
  * Created by Oleg Galaburda on 04.12.15.
  */
 
-namespace aw\events {
+namespace aw\events\dispatcher {
 
   use aw\CallableCollection;
 
   /**
    * @private
    */
-  class EventCollection extends CallableCollection {
+  class InternalListenersCollection extends CallableCollection {
     private $_emptyCallback;
     private $_parent;
     private $_type;
 
-    public function __construct($type, callable $emptyCallback, EventCollection $parent = null) {
+    public function __construct($type, callable $emptyCallback, InternalListenersCollection $parent = null) {
       $this->_type = $type;
       $this->_parent = $parent;
       $this->_emptyCallback = $emptyCallback;

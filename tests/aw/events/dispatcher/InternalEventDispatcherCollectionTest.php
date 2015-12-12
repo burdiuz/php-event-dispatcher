@@ -4,13 +4,13 @@
  */
 
 
-namespace aw\events {
+namespace aw\events\dispatcher {
 
   use \PHPUnit_Framework_TestCase as TestCase;
 
-  class EventListenersTest extends TestCase {
+  class InternalEventDispatcherCollectionTest extends TestCase {
     /**
-     * @var \aw\events\EventListeners
+     * @var \aw\events\dispatcher\InternalEventDispatcherCollection
      */
     public $target;
     public $handler1;
@@ -18,7 +18,7 @@ namespace aw\events {
     public $handler3;
 
     public function setUp() {
-      $this->target = new EventListeners();
+      $this->target = new InternalEventDispatcherCollection();
       $this->handler1 = function(){
         return 1;
       };
