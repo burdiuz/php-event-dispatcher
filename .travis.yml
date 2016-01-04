@@ -1,0 +1,14 @@
+language: php
+php:
+  - '7.0'
+
+install:
+  - composer install
+  - composer require satooshi/php-coveralls
+
+script:
+  - mkdir -p reports
+  - php vendor/bin/phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml
+
+after_success:
+  - travis_retry php vendor/bin/coveralls
