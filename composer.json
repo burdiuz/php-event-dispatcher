@@ -1,25 +1,26 @@
 {
-  "name": "aw/events",
-  "description": "PHP Events",
+  "name": "actualwave/events",
+  "description": "Includes Event, EventDispatcher classes and IEventDispatcher interface for events support.",
+  "keywords": ["event", "dispatcher", "fire", "listener", "callback", "component", "communication"],
+  "homepage": "https://github.com/burdiuz/php-event-dispatcher",
   "version": "0.0.2",
   "license": "MIT",
-  "minimum-stability": "dev",
-  "repositories": [
+  "type": "library",
+  "authors": [
     {
-      "type": "vcs",
-      "url": "https://github.com/burdiuz/php-object"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/burdiuz/php-callbacks"
+      "name": "Oleg Galaburda",
+      "email": "burdiuz@gmail.com",
+      "homepage": "http://actualwave.com",
+      "role": "Developer"
     }
   ],
   "require":{
-    "aw/object":">=0.0.3",
-    "aw/callbacks":">=0.0.1"
+    "php": ">=7.0.0",
+    "actualwave/object":">=0.0.5",
+    "actualwave/callbacks":">=0.0.4"
   },
   "require-dev": {
-    "phpunit/phpunit": "5.0.*"
+    "phpunit/phpunit": "5.1.*"
   },
   "autoload": {
     "psr-4": {

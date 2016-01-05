@@ -1,4 +1,7 @@
 ##PHP-Events
+[![Build Status](https://travis-ci.org/burdiuz/php-event-dispatcher.svg?branch=master)](https://travis-ci.org/burdiuz/php-event-dispatcher)
+[![Coverage Status](https://coveralls.io/repos/burdiuz/php-event-dispatcher/badge.svg?branch=master&service=github)](https://coveralls.io/github/burdiuz/php-event-dispatcher?branch=master)
+[![Dependency Status](https://www.versioneye.com/user/projects/568bb6e4eb4f47003c00139d/badge.svg?style=flat)](https://www.versioneye.com/user/projects/568bb6e4eb4f47003c00139d)
 
 Events allow easy setup and use for communication between components in application.
 Event can notify about state changes and pass data of any kind.
