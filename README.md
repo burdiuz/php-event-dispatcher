@@ -5,6 +5,14 @@
 
 Events allow easy setup and use for communication between components in application.
 Event can notify about state changes and pass data of any kind.
+
+### Installation
+Via [composer](https://getcomposer.org/)
+```
+composer require actualwave/events
+```
+
+### Usage
 To use events you don't need to implement any interfaces, just create `EventDispatcher`
 and register some listeners for events.
 ```php
